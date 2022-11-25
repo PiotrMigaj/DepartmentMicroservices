@@ -20,10 +20,10 @@ class EmployeeController {
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
     }
 
-//    @GetMapping("/{code}")
-//    ResponseEntity<DepartmentDto> getDepartment(@PathVariable String code){
-//        DepartmentDto departmentDto = departmentService.getDepartmentByCode(code);
-//        return new ResponseEntity<>(departmentDto,HttpStatus.OK);
-//    }
+    @GetMapping("/{id}")
+    ResponseEntity<ApiResponseDto> getEmployee(@PathVariable Long id){
+        ApiResponseDto apiResponseDto = employeeService.getEmployeeById(id);
+        return new ResponseEntity<>(apiResponseDto,HttpStatus.OK);
+    }
 
 }
