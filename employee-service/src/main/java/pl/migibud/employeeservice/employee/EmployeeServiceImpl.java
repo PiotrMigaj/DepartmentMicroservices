@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+import pl.migibud.employeeservice.department.DepartmentClient;
 import pl.migibud.employeeservice.department.DepartmentDto;
 import pl.migibud.employeeservice.exception.EmployeeError;
 import pl.migibud.employeeservice.exception.EmployeeException;
@@ -14,7 +15,7 @@ import pl.migibud.employeeservice.exception.EmployeeException;
 class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final WebClient webClient;
+    private final DepartmentClient departmentClient;
 
     @Override
     public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
@@ -57,11 +58,7 @@ class EmployeeServiceImpl implements EmployeeService {
                 )
                 .orElseThrow(() -> new EmployeeException(EmployeeError.EMPLOYEE_NOT_FOUND, String.format("Employee with id: %s not found.", id)));
 
-        DepartmentDto departmentDto = webClient.get()
-                .uri("http://localhost:8080/api/departments/" + employeeDto.getDepartmentCode())
-                .retrieve()
-                .bodyToMono(DepartmentDto.class)
-                .block();
+        DepartmentDto departmentDto = departmentClient.getDepartment(employeeDto.getDepartmentCode());
 
         return new ApiResponseDto(employeeDto,departmentDto);
     }
