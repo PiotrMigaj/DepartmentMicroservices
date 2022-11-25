@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import pl.migibud.employeeservice.department.DepartmentDto;
 import pl.migibud.employeeservice.exception.EmployeeError;
 import pl.migibud.employeeservice.exception.EmployeeException;
@@ -13,7 +14,7 @@ import pl.migibud.employeeservice.exception.EmployeeException;
 class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final RestTemplate restTemplate;
+    private final WebClient webClient;
 
     @Override
     public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
@@ -56,8 +57,11 @@ class EmployeeServiceImpl implements EmployeeService {
                 )
                 .orElseThrow(() -> new EmployeeException(EmployeeError.EMPLOYEE_NOT_FOUND, String.format("Employee with id: %s not found.", id)));
 
-        ResponseEntity<DepartmentDto> responseEntity = restTemplate.getForEntity("http://localhost:8080/api/departments/" + employeeDto.getDepartmentCode(), DepartmentDto.class);
-        DepartmentDto departmentDto = responseEntity.getBody();
+        DepartmentDto departmentDto = webClient.get()
+                .uri("http://localhost:8080/api/departments/" + employeeDto.getDepartmentCode())
+                .retrieve()
+                .bodyToMono(DepartmentDto.class)
+                .block();
 
         return new ApiResponseDto(employeeDto,departmentDto);
     }
