@@ -1,14 +1,35 @@
+#spring:
+#  datasource:
+#    username: root
+#    password: Stefan0987
+#    url: jdbc:mysql://localhost/department_db?serverTimezone=Europe/Warsaw&createDatabaseIfNotExist=true
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#      show-sql: true
+#      format_sql: true
+#      use_sql_comments: true
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+#  application:
+#    name: DEPARTMENT-SERVICE
+#
+#eureka:
+#  instance:
+#    client:
+#      serverUrl:
+#        defaultZone: http://localhost:8761/eureka/
+
 spring:
-  datasource:
-    username: root
-    password: migi987
-    url: jdbc:mysql://localhost/department_db?serverTimezone=Europe/Warsaw&createDatabaseIfNotExist=true
-  jpa:
-    hibernate:
-      ddl-auto: update
-      show-sql: true
-      format_sql: true
-      use_sql_comments: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+  application:
+    name: DEPARTMENT-SERVICE
+  config:
+    import: optional:configserver:http://localhost:8888
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
