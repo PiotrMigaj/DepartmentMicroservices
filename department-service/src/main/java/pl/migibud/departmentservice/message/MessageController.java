@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RefreshScope
 @RestController
-@RequestMapping("/api/message")
+@RequestMapping("/message")
 class MessageController {
     @Value("${spring.boot.message}")
     private String message;

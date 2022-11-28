@@ -15,6 +15,23 @@ spring:
           uri: lb://DEPARTMENT-SERVICE
           predicates:
             - Path=/api/departments/**
+        - id: ORGANISATION-SERVICE
+          uri: lb://ORGANISATION-SERVICE
+          predicates:
+            - Path=/api/organisations/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: '*'
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+
+  zipkin:
+    base-url: http://localhost:9411
 
 eureka:
   instance:
@@ -27,6 +44,4 @@ management:
     web:
       exposure:
         include: '*'
-
-
 

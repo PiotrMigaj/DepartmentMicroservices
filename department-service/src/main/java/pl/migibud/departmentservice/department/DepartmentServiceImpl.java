@@ -24,23 +24,11 @@ class DepartmentServiceImpl implements DepartmentService {
                         }
                 );
 
-        Department department = new Department(
-                departmentDto.getId(),
-                departmentDto.getName(),
-                departmentDto.getDescription(),
-                departmentDto.getCode()
-        );
+        Department department = DepartmentMapper.mapToDepartment(departmentDto);
 
         Department saveDepartment = departmentRepository.save(department);
 
-        DepartmentDto savedDepartmentDto = new DepartmentDto(
-                saveDepartment.getId(),
-                saveDepartment.getName(),
-                saveDepartment.getDescription(),
-                saveDepartment.getCode()
-        );
-
-        return savedDepartmentDto;
+        return DepartmentMapper.mapToDepartmentDto(saveDepartment);
     }
 
     @Override
@@ -49,13 +37,6 @@ class DepartmentServiceImpl implements DepartmentService {
         Department department = departmentRepository.findByCode(code)
                 .orElseThrow(()->new DepartmentException(DepartmentError.DEPARTMENT_NOT_FOUND,String.format("Department with code: %s not found.",code)));
 
-        DepartmentDto departmentDto = new DepartmentDto(
-                department.getId(),
-                department.getName(),
-                department.getDescription(),
-                department.getCode()
-        );
-
-        return departmentDto;
+        return DepartmentMapper.mapToDepartmentDto(department);
     }
 }
